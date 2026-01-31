@@ -11,6 +11,10 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,6 +38,18 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: "./dist"
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: vitest
+        run: npx vitest run | tee test-result.log
+      - name: upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vitest-logs
+          path: test-result.log
+          retention-days: 3
 
   deploy:
     runs-on: ubuntu-latest
