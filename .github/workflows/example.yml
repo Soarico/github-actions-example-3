@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   greet:
-    uses: action.yml
+    uses: ./.github/actions/greet
     with:
       name: "Владимир П."
   build:
